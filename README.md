@@ -1,6 +1,6 @@
 ## Jigrifoods
 
-this is for jigri fooes
+this is for jigri foods
 
 #### License
 

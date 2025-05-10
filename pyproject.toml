@@ -3,7 +3,7 @@ name = "jigrifoods"
 authors = [
     { name = "safdar ali", email = "safdar211@gmail.com"}
 ]
-description = "this is for jigri fooes"
+description = "this is for jigri foods"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]

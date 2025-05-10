@@ -1,7 +1,7 @@
 app_name = "jigrifoods"
 app_title = "Jigrifoods"
 app_publisher = "safdar ali"
-app_description = "this is for jigri fooes"
+app_description = "this is for jigri foods"
 app_email = "safdar211@gmail.com"
 app_license = "mit"
 
