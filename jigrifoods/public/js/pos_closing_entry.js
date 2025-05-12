@@ -17,7 +17,7 @@ function sum_amount(frm) {
 		total_amount += row.amount;
 	});
 	frm.set_value("custom_total_amount", total_amount);
-    balance_amount = (total_amount || 0) - (frm.doc.net_total || 0);
+    balance_amount = (frm.doc.net_total || 0) - (total_amount || 0);
     frm.set_value("custom_balance_amount", balance_amount);
 }
 	
