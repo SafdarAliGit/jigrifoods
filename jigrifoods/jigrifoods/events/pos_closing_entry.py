@@ -3,6 +3,7 @@ from frappe.model.document import Document
 
 def custom_on_submit(doc, method):
     if doc.custom_pos_expenses:
+        abbr = get_company_abbr()
         je = frappe.new_doc("Journal Entry")
         je.voucher_type = "Journal Entry"
         je.posting_date = frappe.utils.nowdate()
@@ -17,7 +18,7 @@ def custom_on_submit(doc, method):
             })
 
         je.append("accounts", {
-            "account": "Cash - JF",    # Replace with actual account
+            "account": f"Cash - {abbr}",    # Replace with actual account
             "credit_in_account_currency": doc.custom_total_amount,
         })
 
@@ -41,7 +42,7 @@ def custom_on_submit(doc, method):
                 "user_remark": item.description
             })
         je2.append("accounts", {
-            "account": "Cash - JF",   # Replace with actual account
+            "account": f"Cash - {abbr}",   # Replace with actual account
             "debit_in_account_currency": doc.custom_total_cash_in_amount
         })
 
@@ -51,3 +52,11 @@ def custom_on_submit(doc, method):
         frappe.msgprint(f"Journal Entry {je2.name} created and submitted.")
 
 
+def get_company_abbr():
+    """Get current company abbreviation"""
+    company = frappe.defaults.get_user_default("Company") or frappe.defaults.get_global_default("company")
+    
+    if not company:
+        return None
+    
+    return frappe.db.get_value("Company", company, "abbr")
