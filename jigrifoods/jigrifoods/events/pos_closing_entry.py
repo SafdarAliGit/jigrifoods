@@ -29,6 +29,7 @@ def custom_on_submit(doc, method):
         frappe.msgprint(f"Journal Entry {je.name} created and submitted.")
 
     if doc.custom_balance_amount > 0:
+        abbr = get_company_abbr()
         je2 = frappe.new_doc("Journal Entry")
         je2.voucher_type = "Journal Entry"
         je2.posting_date = frappe.utils.nowdate()
