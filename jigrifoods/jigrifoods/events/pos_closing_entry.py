@@ -6,7 +6,7 @@ def custom_on_submit(doc, method):
         abbr = get_company_abbr()
         je = frappe.new_doc("Journal Entry")
         je.voucher_type = "Journal Entry"
-        je.posting_date = frappe.utils.nowdate()
+        je.posting_date = doc.posting_date
         je.custom_pos_closing_entry = doc.name
    
         # Example debit entries
@@ -32,7 +32,7 @@ def custom_on_submit(doc, method):
         abbr = get_company_abbr()
         je2 = frappe.new_doc("Journal Entry")
         je2.voucher_type = "Journal Entry"
-        je2.posting_date = frappe.utils.nowdate()
+        je2.posting_date = doc.posting_date
         je2.custom_pos_closing_entry = doc.name
    
         # Example debit entries
