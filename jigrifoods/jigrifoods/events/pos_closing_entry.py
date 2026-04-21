@@ -1,4 +1,5 @@
 import frappe
+from frappe.utils import flt
 from frappe.model.document import Document
 
 def custom_on_submit(doc, method):
@@ -61,3 +62,38 @@ def get_company_abbr():
         return None
     
     return frappe.db.get_value("Company", company, "abbr")
+
+
+def custom_validate(doc, method):
+    set_cash_amount(doc)
+    sum_cash_in_entries_amount(doc)
+    sum_amount(doc)
+
+def set_cash_amount(doc):
+    """Get expected Cash amount from payment_reconciliation child table"""
+    cash_amt = 0.0
+    for row in doc.payment_reconciliation or []:
+        if row.mode_of_payment == "Cash":
+            cash_amt = flt(row.expected_amount)
+            break
+    doc.custom_cash_amt = cash_amt
+
+def sum_amount(doc):
+    """Calculate total expenses and balance amount"""
+    custom_cash_amt = flt(doc.custom_cash_amt)
+    total_expenses  = flt(sum(flt(r.amount) for r in doc.custom_pos_expenses or []))
+    total_in        = flt(doc.custom_total_cash_in_amount)
+    balance         = custom_cash_amt + total_in - total_expenses
+
+    doc.custom_total_amount   = total_expenses
+    doc.custom_balance_amount = balance
+
+def sum_cash_in_entries_amount(doc):
+    """Calculate total cash-in entries and balance amount"""
+    total_in        = flt(sum(flt(r.amount) for r in doc.custom_cash_in_entries or []))
+    custom_cash_amt = flt(doc.custom_cash_amt)
+    total_expenses  = flt(sum(flt(r.amount) for r in doc.custom_pos_expenses or []))
+    balance         = custom_cash_amt + total_in - total_expenses
+
+    doc.custom_total_cash_in_amount = total_in
+    doc.custom_balance_amount       = balance
